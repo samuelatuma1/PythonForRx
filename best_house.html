@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        body{
+            background-color:black;
+            color: burlywood;
+        }
+    </style>
+
+    <script>
+        street = [
+            {school: true, gym: false, hospital: false},
+            {school: false, gym: false, hospital: false},
+            {school: true, gym: false, hospital: false},
+            {school: false, gym: true, hospital: false},
+            {school: false, gym: false, hospital: true},
+        ]
+        spec = ['school', 'gym', 'hospital']
+
+        function best_house(street, spec){
+            idx_details = []
+
+            // Compute distance to spec for each house, store data in idx_details
+            for (let i = 0; i < street.length; i++){
+                const distances = {}
+                const curr_block = street[i]
+
+                // search current house
+                for(let has_spec in curr_block){
+                    if (curr_block[has_spec]){
+                        distances[has_spec] = 0
+                    }
+                    else{
+                        distances[has_spec] = 1/0
+                    }
+                }
+
+                //  search lower
+                for(let search_idx = 0; search_idx < i; search_idx++){
+                    let search_block = street[search_idx]
+                    for(let searchspec in search_block){
+                        if(search_block[searchspec]){
+                            let search_dist = i - search_idx
+                            let curr_dist = distances[searchspec]
+                            shorter_dist = curr_dist < search_dist ? curr_dist : search_dist
+                            distances[searchspec] = shorter_dist
+                        }
+                    }
+                }
+
+                // Search upper
+                for(let search_idx = i+1; search_idx < street.length; search_idx++){
+                    let search_block = street[search_idx]
+                    for(let searchspec in search_block){
+                        if(search_block[searchspec]){
+                            let search_dist = search_idx - i
+                            let curr_dist = distances[searchspec]
+                            shorter_dist = curr_dist < search_dist ? curr_dist : search_dist
+                            distances[searchspec] = shorter_dist
+                        }
+                    }
+                }
+                idx_details.push(distances)
+            }
+            
+            console.log(idx_details)
+
+            // Compute house with shortest overall distance
+            let best_house = null
+            let total_dist = 1/ 0
+            for (let idx = 0; idx < idx_details.length; idx++){
+                let house = idx_details[idx]
+                let house_dist = 0
+                for(let dist in house){
+                    house_dist += house[dist]
+                }
+
+                if (house_dist < total_dist ){
+                    best_house = idx
+                    total_dist = house_dist
+                }
+            }
+
+            return best_house
+
+
+        }
+        console.log(best_house(street, spec))
+    </script>
+</body>
+</html>
