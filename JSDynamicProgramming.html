@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        // let set = new Set([1, 4, 8, 4, 5])
+        // console.log(set)
+
+        // // Access data in it
+        // console.log(set.has(8))
+        // // Add
+        // set.add(6)
+        // console.log(set)
+        // // Modify 
+        // // You can't modify data in a set because we cant access it
+        // // Delete 
+        // set.delete(10)
+        // console.log(set)
+        set1 = new Set([1, 2, 3,4, 5])
+        set2 = new Set([2, 4, 6, 8, 10])
+
+
+
+        // Functions
+        // Creating pure functions
+        function add(a, b){
+            let mysum  = a + b
+            return mysum
+        }
+        // let z = 13
+        // alert(add(z, 3) * 5)
+        // cosole.log(mysum)
+
+        //Scope 
+        // {
+        //     {
+        //         // let q = 8
+        //         {
+        //             q = 10
+        //             console.log(q)
+        //         }
+        //            q = 7
+        //     }
+        // }
+
+        // Functions woth side effects
+        let mylist = 10
+
+       // anonymous functions
+       
+
+    //    mult = (a, b) => {
+    //        return a * b
+    //    }
+    //    mult = (a, b) => a * b
+    //    square = a => a ** 2
+    //    // one last way to loop through an array
+    //    let arr = [1, 2, 3, 4, 5]
+
+    //    arr.forEach(num  => {
+    //     console.log(num)
+    //     alert(num * num)
+    //    })
+
+    const investments = [
+        {'name': 'Tesla', 'cost': 120000, 'revenue': 210000},
+        {'name': 'Microsoft', 'cost': 40000, 'revenue': 120000},
+        {'name': 'Apple', 'cost': 70000, 'revenue': 143000},
+        {'name': 'Tesla', 'cost': 83000, 'revenue': 172000},
+        {'name': 'Amazon', 'cost': 68000, 'revenue': 173000}
+    ]
+
+    const investmentsb = [
+        {'name': 'SpaceX', 'cost': 120500, 'revenue': 210400},
+        {'name': 'Microsoft', 'cost': 40000, 'revenue': 120000},
+        {'name': 'Ultron', 'cost': 71000, 'revenue': 143800},
+        {'name': 'Tesla', 'cost': 83000, 'revenue': 171000},
+        {'name': 'Amazon', 'cost': 68000, 'revenue': 173000}
+    ]
+
+    function best_investment(inva, invb){
+        let inva_rev = 0
+        let inva_cost = 0
+        for(let inv of inva){
+            inva_rev += inv["revenue"]
+            inva_cost += inv["cost"]
+        }
+
+        let invb_rev = 0
+        let invb_cost = 0
+        for(let inv of invb){
+            invb_rev += inv["revenue"]
+            invb_cost += inv["cost"]
+        }
+
+        total_inva_worth = inva_rev - inva_cost
+        total_invb_worth = invb_rev - invb_cost
+
+        return total_inva_worth >= total_invb_worth ? inva : invb
+    }
+    const all_investments = {}
+    function optimize_investment(investments, available, curr_pos=0, choices=[]){
+        if(all_investments.hasOwnProperty(curr_pos)){
+            return all_investments[curr_pos]
+        }
+        if(available <= 0 || curr_pos >= investments.length){
+            return choices
+        }
+        if (investments[curr_pos].cost > available){
+            return optimize_investment(investments, available, curr_pos + 1, choices)
+        }
+        
+        else{
+            curr_investment = investments[curr_pos]
+            new_choice = choices.length == 0 ? [] : choices.slice(0, choices.length)
+            new_choice.push(curr_investment)
+            invest = optimize_investment(investments, available - curr_investment.cost, curr_pos + 1, new_choice)
+            dont_invest = optimize_investment(investments, available, curr_pos + 1, choices)
+
+            decision = best_investment(invest, dont_invest)
+            // debugger;
+            all_investments[curr_pos] = decision
+
+            return decision
+        }
+
+    }
+
+    console.log(optimize_investment(investmentsb, 200000))
+    
+
+
+    </script>
+
+    
+</body>
+</html>
